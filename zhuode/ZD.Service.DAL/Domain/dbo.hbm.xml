@@ -1,0 +1,619 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="ZD.Service.DAL" namespace="ZD.Service.DAL.Domain" >
+
+
+  <class name="UserInfo" table="UserInfo" lazy="false">
+    <id name="UserName" column="UserName" type ="string">
+      <generator class="assigned" />
+    </id>
+    <property name="Password" column="Password" not-null="true" />
+
+    <many-to-one name ="Employee" class="Employee" column="EId"  unique="true"/>
+
+  </class>
+
+  <class name="Employee" table="Employee" lazy="false">
+    <id name="EId" column="EId" type ="long">
+      <generator class="native" />
+    </id>
+    <property name="Name" column="Name" not-null="true" />
+
+  </class>
+  
+  <!--
+  <class name="UserLogin" table="Party_UserLogin" lazy="false">
+    <id name="Id" column="UserLoginID" type ="string">
+      <generator class="assigned" />
+    </id>
+    <property name="PartyId" column="PartyId" not-null="true" />
+    <property name="CurrentPassword" column="CurrentPassword" not-null="true" />
+    <property name="UserAccount" column="Account" not-null="true" />
+    <property name="IsSystem" column="IsSystem" not-null="true" />
+    <property name="IsDeleted" column="IsDeleted" not-null="true" />
+    <property name ="HasLogin" column ="HasLogin" not-null="false"/>
+    <property name="RegisitDate" column="RegisitDate" not-null="false" />
+    <property name="LastLoginDate" column="LastLoginDate" not-null="false" />
+    <property name="PartyType" column="PartyType" not-null="true" />
+    <property name="LoginType" column="LoginType" not-null="true" />
+    <property name="ExtUid" column="ExtUid" not-null="false" />
+    <property name="UserKey" column="UserKey" not-null="false" />
+  </class>
+
+  <class name="UserLoginPasswordResettlement" table="Party_UserLogin_PasswordResettlement" lazy="false">
+    <id name="Id" column="PartyId" type ="string">
+      <generator class="assigned" />
+    </id>
+    <property name="PartyType" column="PartyType" not-null="true" />
+    <property name="VerifyCode1" column="VerifyCode1" not-null="true" />
+    <property name="VerifyCode2" column="VerifyCode2" not-null="true" />
+    <property name="VerifyCode3" column="VerifyCode3" not-null="true" />
+    <property name="CreateDate" column="CreateDate" not-null="true" />
+  </class>
+
+
+
+  <class name="Contact" table="Party_Contact" lazy="false">
+    <id name="Id" column="Id" type ="long">
+      <generator class="hilo" />
+    </id>
+    <property name="Name" column="Name" not-null="false" />
+    <property name="Email" column="Email" not-null="false" />
+    <property name="MobilePhone" column="MobilePhone" not-null="false" />
+    <property name ="HomePhone" column ="HomePhone" not-null="false"/>
+    <property name="Qq" column="Qq" not-null="false" />
+    <property name="Msn" column="Msn" not-null="false" />
+    <property name ="ModifiedBy" column="ModifiedBy" type="string"/>
+    <property name ="ModifiedTime" column="ModifiedDate" type="DateTime"/>
+    <many-to-one name ="Party" class="Party" column="PartyId"  unique="true"/>
+
+    <property name ="Fax" column ="Fax" not-null="false"/>
+    <property name ="ExtensionNo" column ="ExtensionNo" not-null="false"/>
+  </class>
+
+
+  <class name="Address" table="Party_Address" lazy="false"  >
+    <id name="Id" column="Id" type ="long">
+      <generator class="hilo" />
+    </id>
+    <property name="ProvinceId" column="ProvinceId" not-null="true" />
+    <property name="CityId" column="CityId" not-null="false" />
+    <property name="CityZoneId" column="CityZoneId" not-null="false" />
+    <property name="AreaId" column="AreaId" not-null="true" />
+    <property name="AddressDetail" column="AddressDetail" not-null="false" />
+    <property name="ContactName" column="ContactName" not-null="false" />
+    <property name ="PostalCode" column ="PostalCode" not-null="false"/>
+    <property name="AddressType" column="AddressType" not-null="false" />
+    <property name="ContactPhone" column="ContactPhone" not-null="false" />
+    <property name="MobilePhone" column="MobilePhone" not-null="false" />
+    <property name="IsAvaliable" column="IsAvaliable" not-null="false" />
+    <property name ="ModifiedBy" column="ModifiedBy" type="string"/>
+    <property name ="ModifiedTime" column="ModifiedDate" type="DateTime"/>
+    <property name="Latitude" column="Latitude" not-null="false" />
+    <property name="Longitude" column="Longitude" not-null="false" />
+    <property name="PickupSiteId" column="SelfPickupSiteId" not-null="false" />
+    <many-to-one name="Party" class="Party" column ="PartyId" cascade ="all" />
+
+  </class>
+
+  <class name="ProvinceCity" table="Party_Province_City" lazy="false" batch-size="300">
+
+    <id name="Id" column="Id" type ="long">
+      <generator class="hilo" />
+    </id>
+    <property name="Name" column="Name" not-null="true" />
+    <property name="PostalCode" column="PostalCode" not-null="false" />
+    <property name="GeoType" column="GeoType" not-null="false" />
+    <property name="IsAvailable" column="IsAvailable" not-null="false" />
+    <property name="SupportCOD" column="SupportCOD" not-null="false" />
+
+    <bag name="ChildRegions" lazy="false" cascade="all" batch-size="100">
+      <key column="ParentId" />
+      <one-to-many class="ProvinceCity" />
+    </bag>
+
+    <many-to-one name="Parent" class="ProvinceCity" column="ParentId" cascade ="all" lazy="false" />
+  </class>
+
+
+  <class name="ScalarProvinceCity" table="Party_Province_City">
+
+    <id name="Id" column="Id" type ="long">
+      <generator class="hilo" />
+    </id>
+    <property name="Name" column="Name" not-null="true" />
+    <property name="PostalCode" column="PostalCode" not-null="false" />
+    <property name="GeoType" column="GeoType" not-null="false" />
+    <property name="IsAvailable" column="IsAvailable" not-null="false" />
+    <property name="SupportCOD" column="SupportCOD" not-null="false" />
+    <property name="ParentId" column="ParentId" not-null="false" />
+  </class>
+
+  <class name="MobileProvinceCity" table="Party_Province_City">
+
+    <id name="Id" column="Id" type ="long">
+      <generator class="hilo" />
+    </id>
+    <property name="Name" column="Name" not-null="true" />
+    <property name="COD" column="SupportCOD" not-null="false" />
+    <property name="GeoType" column="GeoType" not-null="false" />
+    <property name="PId" column="ParentId" not-null="false" />
+    <property name="IsAvailable" column="IsAvailable" not-null="false" />
+  </class>
+
+  <class name="CityCircle" table="Party_City_Circle" lazy="false" batch-size="300">
+
+    <id name="Id" column="Id" type ="long">
+      <generator class="hilo" />
+    </id>
+    <property name="Name" column="Name" not-null="true" />
+    <property name="CityID" column="CityID" not-null="true" />
+    <property name="DistricID" column="DistricID" not-null="true" />
+    <property name="Description" column="Description" not-null="false" />
+    <property name="Address" column="Address" not-null="false" />
+    <property name="Type" column="Type" not-null="false" />
+    <property name="IsAvailable" column="IsAvailable" not-null="false" />
+
+    <bag name="Child" lazy="false" cascade="all" batch-size="100">
+      <key column="ParentId" />
+      <one-to-many class="CityCircle" />
+    </bag>
+
+    <many-to-one name="Parent" class="CityCircle" column="ParentId" cascade ="all" lazy="false" />
+  </class>
+
+  <class name="ScalarCityCircle" table="Party_City_Circle" lazy="false" batch-size="300">
+
+    <id name="Id" column="Id" type ="long">
+      <generator class="hilo" />
+    </id>
+    <property name="Name" column="Name" not-null="true" />
+    <property name="CityID" column="CityID" not-null="true" />
+    <property name="DistricID" column="DistricID" not-null="true" />
+    <property name="Description" column="Description" not-null="false" />
+    <property name="Type" column="Type" not-null="false" />
+    <property name="ParentId" column="ParentId" not-null="false" />
+    <property name="IsAvailable" column="IsAvailable" not-null="false" />
+
+  </class>
+  <class name="CircleCompany" table="Party_City_Circle_Company" lazy="false" batch-size="300">
+
+    <id name="Id" column="Id" type ="long">
+      <generator class="hilo" />
+    </id>
+    <property name="CircleID" column="CircleID" not-null="true" />
+    <property name="Name" column="Name" not-null="true" />
+    <property name="Address" column="Address" not-null="false" />
+    <property name="Description" column="Description" not-null="false" />
+    <property name="IndustryType" column="IndustryType" not-null="false" />
+    <property name="IsAvailable" column="IsAvailable" not-null="false" />
+
+  </class>
+
+  <class name="CustomerDefaultSettings" table="Party_Customer_Default_Settings" lazy="false">
+    <cache usage="read-only"/>
+
+    <id name="Id" column="Id" type ="string">
+      <generator class="assigned" />
+    </id>
+
+    <property name="AddressId" column="AddressId" not-null="false" />
+    <property name="PaymentType" column="PaymentType" not-null="false" />
+    <property name="ShipmentType" column="ShipmentType" not-null="false" />
+    <property name="PickupSiteId" column="PickupSiteId" not-null="false" />
+
+  </class>
+
+  <class name="CustomerFromPartner" table="Party_Customer_From_Partner" lazy="false">
+    <cache usage="read-only"/>
+
+    <id name="Id" column="Id" type ="long">
+      <generator class="hilo" />
+    </id>
+
+    <property name="PCode" column="PCode" not-null="true" />
+    <property name="PartyId" column="PartyId" not-null="true" />
+    <property name="CustomerName" column="CustomerName" not-null="true" />
+    <property name="FirstVisitDate" column="FirstVisitDate" not-null="false" />
+    <property name="CreateDate" column="CreateDate" not-null="true" />
+    <property name="ExtParam" column="ExtParam" not-null="false" />
+
+  </class>
+
+  <class name="PartnerIncome" table="Party_Partner_Income" lazy="false">
+    <cache usage="read-only"/>
+
+    <id name="Id" column="ID" type ="long">
+      <generator class="hilo" />
+    </id>
+
+    <property name="PartnerId" column="PartnerId" not-null="true" />
+    <property name="Income" column="Income" not-null="true" />
+    <property name="DateRange" column="DateRange" not-null="true" />
+
+  </class>
+
+  <class name="Invoice" table="Party_Invoice" lazy="false">
+    <id name="Id" column="Id" type ="long">
+      <generator class="hilo" />
+    </id>
+    <property name="InvoiceType" column="InvoiceType" not-null="true" />
+    <property name="InvoiceTitle" column="InvoiceTitle" not-null="true" />
+    <property name="InvoiceTitleName" column="InvoiceTitleName" not-null="true" />
+    <property name="InvoiceContent" column="InvoiceContent" not-null="true" />
+    <property name="PartyId" column="PartyId" not-null="true" />
+    <property name="InvoiceTaxesType" column="InvoiceTaxesType" not-null="true" />
+    <property name="IsRequired" column="IsRequired"/>
+    <property name ="ModifiedBy" column="ModifiedBy" type="string"/>
+    <property name ="ModifiedTime" column="ModifiedDate" type="DateTime"/>
+    <property name ="Status" column="Status" not-null="true"/>
+
+    -->
+  <!--<many-to-one name="Party" class="Party" column ="PartyID" cascade ="all" />--><!--
+  </class>
+
+  <class name="CustomerPointTrans" table="Party_Customer_Point_Trans" lazy="false">
+    <id name="Id" column="Id" type ="long">
+      <generator class="hilo" />
+    </id>
+    <property name="CustomerId" column="CustomerId" not-null="true" />
+    <property name="SalesOrderId" column="SalesOrderId" not-null="true" />
+    <property name="DiffPoints" column="DiffPoints" not-null="true" />
+    <property name ="TransType" column="TransType" type="string"/>
+    <property name ="Comments" column="Comments" type="string"/>
+    <property name ="ReturnOrderId" column="ReturnOrderId"/>
+
+    <property name ="ModifiedBy" column="ModifiedBy" type="string"/>
+    <property name ="ModifiedTime" column="ModifiedTime" type="DateTime"/>
+  </class>
+
+
+  <class name="CustomerLevel" table="Party_Customer_Level" lazy="false">
+    <id name="Id" column="MemberLevel" type ="string">
+      <generator class="assigned" />
+    </id>
+    <property name="LevelName" column="LevelName" not-null="true" />
+
+  </class>
+
+  <class name="GiftCard" table="Party_GiftCard" lazy="false">
+    <id name="Id" column="Id" type ="String">
+      <generator class="ZD.Service.DAL.Domain.Common.GiftCardIdGenerator, ZD.Domain" >
+        <param name="table" >hibernate_giftcard_key</param>
+        <param name="column" >next_hi</param>
+        <param name="max_lo" >100</param>
+      </generator>
+    </id>
+
+    <property name="Password" column="Password" not-null="true" />
+    <property name="ProductId" column="ProductId" not-null="true" />
+    <property name="ProductSKU" column="ProductSKU" not-null="true" />
+    <property name="TotalAmount" column="TotalAmount" not-null="true" />
+    <property name ="Amount" column ="Amount"  not-null="false"/>
+    <property name ="CustomerId" column="CustomerId" type="string"/>
+    <property name ="SalesOrderId" column="SalesOrderId" type="string"/>
+
+    <property name ="Status" column="Status"/>
+    <property name ="CreateDate" column="CreateDate" type="DateTime"/>
+    <property name ="DealDate" column="DealDate" type="DateTime"/>
+    <property name ="ActiveDate" column="ActiveDate" type="DateTime"/>
+
+    <property name ="ActiveExpirationDate" column="ActiveExpirationDate" type="DateTime"/>
+    <property name ="UseExpirationDate" column="UseExpirationDate" type="DateTime"/>
+    <property name ="ModifiedBy" column="ModifiedBy" type="string"/>
+    <property name ="ModifiedTime" column="ModifiedDate" type="DateTime"/>
+
+    <property name ="Comments" column="Comments"/>
+
+    <bag name="GiftCardTrans" lazy="false" cascade="all">
+      <key column="GiftCardId" />
+      <one-to-many class="GiftCardTrans" />
+    </bag>
+
+  </class>
+
+  <class name="GiftCardTrans" table="Party_GiftCard_Trans" lazy="false">
+    <id name="Id" column="Id" type ="long">
+      <generator class="hilo" />
+    </id>
+    <property name="Credit" column="Credit" not-null="false" />
+    <property name="Debit" column="Debit" not-null="false" />
+    <property name="CustomerId" column="CustomerId" not-null="false" />
+    <property name="OrderId" column="OrderID" not-null="false" />
+    <property name="Amount" column="Amount" not-null="false" />
+    <property name ="TransType" column ="TransType" not-null="false"/>
+    <property name="Comments" column="Comments" not-null="false" />
+    <property name ="ModifiedBy" column="ModifiedBy" type="string"/>
+    <property name ="ModifiedTime" column="ModifiedDate" type="DateTime"/>
+    <many-to-one name ="GiftCard" class="GiftCard" column="GiftCardId" />
+
+  </class>
+
+  <class name="GiftCardPassWord" table="Party_GiftCard_Password" lazy="false">
+    <id name="Id" column="Id" type ="long">
+      <generator class="hilo" />
+    </id>
+    <property name="OrderId" column="OrderId" not-null="false" />
+    <property name="PartyID" column="PartyID" not-null="false" />
+    <property name="GiftCardID" column="GiftCardID" not-null="false" />
+    <property name="PassWord" column="PassWord" not-null="false" />
+    <property name ="ProductId" column ="ProductId" not-null="false"/>
+    <property name ="CreateTime" column="CreateTime" type="DateTime"/>
+    <property name ="IsOk" column ="IsOk" not-null="false"/>
+  </class>
+
+  <class name="Store" table="Party_Company_Store" lazy="false">
+    <id name="Id" column="Id" type ="long">
+      <generator class="hilo" />
+    </id>
+    <property name="CompanyId" column="CompanyId" not-null="true" />
+    <property name="Name" column="Name" not-null="true" />
+    <property name="SCode" column="SCode" not-null="true" />
+    <property name="SType" column="SType" not-null="false" />
+    <property name ="ContactPhone" column ="ContactPhone" not-null="false"/>
+    <property name ="Manager" column ="Manager" not-null="false"/>
+    <property name ="ManagerMobilePhone" column ="ManagerMobilePhone" not-null="false"/>
+    <property name ="IsOpen" column ="IsOpen" not-null="true"/>
+    <property name ="IsAvaliable" column ="IsAvaliable" not-null="true"/>
+    <property name ="ModifiedBy" column="ModifiedBy" type="string"/>
+    <property name ="ModifiedTime" column="ModifiedDate" type="DateTime"/>
+
+    <many-to-one name="StoreAddress" class="ZD.Domain.Party.Address,ZD.Domain.Party" column="AddressId" />
+  </class>
+
+  <class name="Verify" table="Party_Customer_Verify" lazy="false">
+    <id name="Id" column="Id" type ="long">
+      <generator class="hilo" />
+    </id>
+    <property name="PartyID" column="PartyID" not-null="true" />
+    <property name="Type" column="Type" not-null="true" />
+    <property name="SenderCode" column="SenderCode" not-null="true" />
+    <property name="VerifyCode" column="VerifyCode" not-null="true" />
+    <property name ="RandomCode" column ="RandomCode" not-null="false"/>
+    <property name ="CreateTime" column="CreateTime" type="DateTime"/>
+    <property name ="VerifyTime" column ="VerifyTime" type="DateTime"/>
+    <property name ="Status" column ="Status" not-null="true"/>
+    <property name ="ExpiredTime" column ="ExpiredTime" type="DateTime"/>
+    <property name ="IsAvailable" column ="IsAvailable" not-null="true"/>
+  </class>
+
+  <class name="VerifyType" table="Party_Customer_Verify_Type" lazy="false">
+    <id name="Id" column="Id" type ="long">
+      <generator class="hilo" />
+    </id>
+    <property name="Name" column="Name" not-null="true" />
+    <property name="Description" column="Description" not-null="false" />
+    <property name="Value" column="Value" not-null="true" />
+    <property name="Medium" column="Medium" not-null="true" />
+    <property name ="ReturnUrl" column ="ReturnUrl" not-null="false"/>
+    <property name ="ExpirationSum" column="ExpirationSum" not-null="true"/>
+    <property name ="ExpirationUnit" column ="ExpirationUnit" not-null="true"/>
+    <property name ="ModifiedTime" column ="ModifiedTime" type="DateTime"/>
+    <property name ="ModifiedBy" column="ModifiedBy" type="string"/>
+    <property name ="EmailUrlModle" column="EmailUrlModle" type="string"/>
+    <property name ="SendContent" column="SendContent" not-null="true"/>
+    <property name ="IsCustomer" column="IsCustomer" not-null="true"/>
+    <property name ="IsAvailable" column ="IsAvailable" not-null="true"/>
+  </class>
+
+  <class name="BlackList" table="Party_BlackList" lazy="false">
+    <id name="Id" column="ID" type ="long">
+      <generator class="hilo" />
+    </id>
+    <property name="MemberType" column="MemberType" not-null="false" />
+    <property name="CustomerName" column="CustomerName" not-null="false" />
+    <property name="RealName" column="RealName" not-null="false" />
+    <property name="MobilePhone" column="MobilePhone" not-null="false" />
+    <property name="ContactPhone" column="ContactPhone" not-null="false" />
+    <property name="Email" column="Email" not-null="false" />
+    <property name="ProvinceId" column="ProvinceId" not-null="false" />
+    <property name="CityId" column="CityId" not-null="false" />
+    <property name="CityZoneId" column="CityZoneId" not-null="false" />
+    <property name="AddressDetail" column="AddressDetail" not-null="false" />
+    <property name="IsAvaliable" column="IsAvaliable" not-null="false" />
+    <property name ="ModifiedBy" column="ModifiedBy" type="string"/>
+    <property name ="ModifiedTime" column="ModifiedDate" type="DateTime"/>
+    <property name="CustomerId" column="CustomerId" not-null="false" />
+    <property name="Modules" column="Modules" not-null="false" />
+  </class>
+
+  <class name="BlacklistModule" table="Party_Blacklist_Module" lazy="false">
+    <id name="Id" column="ID" type ="long">
+      <generator class="hilo" />
+    </id>
+    <property name="Index" column="ModuleIndex" not-null="false" />
+    <property name="Name" column="ModuleName" not-null="false" />
+    <property name="Text" column="ModuleText" not-null="false" />
+  </class>
+
+  <class name="InviteRegister" table="Invite_Register" lazy="false">
+    <id name="Id" column="Id" type ="long">
+      <generator class="hilo" />
+    </id>
+    <property name="PartyId" column="PartyId" not-null="true" />
+    <property name="InviteType" column="InviteType" not-null="false" />
+    <property name="InviteCode" column="InviteCode" not-null="false" />
+    <property name="ReceivedBy" column="ReceivedBy" not-null="false" />
+    <property name="InviteTime" column="InviteTime" not-null="false" />
+    <property name="IP" column="IP" not-null="false" />
+    <property name="HHID" column="HHID" not-null="false" />
+  </class>
+
+  <class name="InviteLink" table="Invite_Link" lazy="false">
+    <id name="Id" column="partyId" type ="string">
+      <generator class="assigned" />
+    </id>
+    <property name="LinkCode" column="linkCode" not-null="false" />
+    <property name="InviteCount" column="inviteCount" not-null="false" />
+    <property name="CreateTime" column="CreateTime" not-null="false" />
+    <property name="IP" column="IP" not-null="false" />
+    <property name="HHID" column="HHID" not-null="false" />
+  </class>
+
+  <class name="InviteRegisterAccepted" table="Invite_Register_Accepted" lazy="false">
+    <id name="Id" column="Id" type ="long">
+      <generator class="hilo" />
+    </id>
+    <property name="PartyId" column="PartyId" not-null="true" />
+    <property name="InvitedUserId" column="InvitedUserId" not-null="true" />
+    <property name="InviteCode" column="InviteCode" not-null="false" />
+    <property name="RegisteredTime" column="RegisteredTime" not-null="false" />
+    <property name="AwardType" column="AwardType" not-null="false" />
+    <property name="AwardContent" column="AwardContent" not-null="false" />
+  </class>
+
+  <class name="SysUserSupplier" table ="Sysuser_Supplier" lazy="false">
+    <id name="Id" column="Id" type ="long">
+      <generator class="hilo" />
+    </id>
+    <property name="SysUserId" column="SysUserId" not-null="false" />
+    <property name="SupplierId" column="SupplierId" not-null="false" />
+    <property name="IsValid" column="IsValid" not-null="false" />
+    <property name="IsForAll" column="IsForAll" not-null="false" />
+  </class>
+
+  <class name="SysUserWareHouse" table ="SysUser_WareHouse" lazy="false">
+    <id name="Id" column="Id" type ="long">
+      <generator class="hilo" />
+    </id>
+    <property name="SysUserId" column="SysUserId" not-null="false" />
+    <property name="WareHouseID" column="WareHouseID" not-null="false" />
+    <property name ="CreatedBy" column="CreatedBy" type="string"/>
+    <property name ="CreatedDate" column="CreatedDate" type="DateTime"/>
+  </class>
+
+  <class name="SysUserSupplierForQuery" table ="Sysuser_Supplier" lazy="false">
+    <id name="Id" column="Id" type ="long">
+      <generator class="hilo" />
+    </id>
+    <property name="SysUserId" column="SysUserId" not-null="false" />
+    <property name="SupplierId" column="SupplierID" not-null="false" />
+    <property name="IsValid" column="IsValid" not-null="false" />
+    <property name="IsForAll" column="IsForAll" not-null="false" />
+  </class>
+
+  <class name="SysUserSupplierLog" table ="Sysuser_Supplier_Log" lazy="false">
+    <id name="Id" column="Id" type ="long">
+      <generator class="hilo" />
+    </id>
+    <property name="SysUserSupplierId" column="SysUserSupplierId" not-null="false" />
+    <property name="SysUserId" column="SysUserId" not-null="false" />
+    <property name="SupplierID" column="SupplierID" not-null="false" />
+    <property name="IsValid" column="IsValid" not-null="false" />
+    <property name ="ModifiedBy" column="ModifiedBy" type="string"/>
+    <property name ="ModifiedTime" column="ModifiedDate" type="DateTime"/>
+
+  </class>
+
+  <class name="CustomerSubscription" table ="Party_Subscribe" lazy="false">
+    <id name="Id" column="Id" type ="long">
+      <generator class="hilo" />
+    </id>
+    <property name="SubscribeType" column="Type" not-null="true" />
+    <property name="Email" column="Email" not-null="true" />
+    <property name="AreaSiteName" column="AreaSiteName" not-null="false" />
+  </class>
+
+  <class name="PayerSimple" table ="Party_Payer" lazy="false" >
+    <id name="Id" column="PartyId" type ="string">
+      <generator class="assigned" />
+    </id>
+    <property name="Name" column="Name" not-null="true" />
+    <property name="FullName" column="FullName" not-null="false" />
+    <property name="ContactName" column="ContactName" not-null="false" />
+    <property name="PhoneNo" column="PhoneNo" not-null="false" />
+    <property name="MobilePhone" column="MobilePhone" not-null="false" />
+    <property name="FaxNo" column="FaxNo" not-null="false" />
+    <property name="PostalCode" column="PostalCode" not-null="false" />
+    <property name="Address" column="Address" not-null="false" />
+    <property name="Description" column="Description" not-null="false" />
+    <property name="IsPoint" column="IsPoint" not-null="false" />
+  </class>
+
+  <class name="CustomerPaid" table ="Party_Customer_Paid" lazy="false" >
+    <id name="Id" column="Id" type="long">
+      <generator class="hilo" />
+    </id>
+    <property name="PartyId" column="PartyId" not-null="true" />
+    <property name="Measure" column="Measure" not-null="true" />
+    <property name="InYear" column="InYear" not-null="true" />
+    <property name="TotalPaid" column="TotalPaid" not-null="true" />
+    <property name="TotalReturned" column="TotalReturned" not-null="true" />
+    <property name="LatestUpdateTime" column="LatestUpdateTime" type ="DateTime" not-null="true" />
+  </class>
+
+  <class name="SimpleCustomer" table ="Party_Customer" lazy="false" >
+    <id name="Id" column="PartyId" type="string">
+      <generator class="assigned" />
+    </id>
+
+    <property name="Name" column="CustomerName" not-null="true" />
+    <property name="MemberRank" column="MemberRank" not-null="true" />
+    <property name="MemberType" column="MemberType" not-null="true" />
+    <property name="Age" column="Age" not-null="false" />
+    <property name="Points" column="Points" not-null="false" />
+    <property name="Gender" column="Gender" not-null="false" />
+    <property name="Signature" column="Signature" not-null="false" />
+    <property name="Birthday" column="Birthday" not-null="false" />
+    <property name="NickName" column="NickName" not-null="true" />
+    <property name="RegisterDate" column="RegisterDate" not-null="false" />
+    <property name="RealName" column="RealName" not-null="false" />
+    <property name="MemberClass" column="MemberClass" not-null="false" />
+    <property name="VerifyType" column="VerifyType" not-null="false" />
+    <property name="HasNoAvaliableOrder" column="HasNoAvaliableOrder" not-null="false" />
+    <property name="CircleCompanyID" column="CircleCompanyID" not-null="false" />
+    <property name="CompanyId" column="CompanyId" not-null="false" />
+    <property name="IsB2B" column="IsB2B" />
+    <property name="RegisterAreaSiteId" column="RegisterAreaSiteId" />
+
+  </class>
+  <class name="WeixinAttention" table ="Party_Weixin_Attention" lazy="false" >
+    <id name="Id" column="Id" type="long">
+      <generator class="hilo" />
+    </id>
+    <property name="SourceAccount" column="SourceAccount" />
+    <property name="CouponNumber" column="CouponNumber" />
+    <property name="AttentionTime" column="AttentionTime" />
+  </class>
+
+  <class name="InviteShipSameDay" table="Invite_ShipSameDay" lazy="false">
+    <id name="Id" column="Id" type ="long">
+      <generator class="hilo" />
+    </id>
+    <property name="IsAnonymousUser" column="IsAnonymousUser" not-null="true" />
+    <property name="MobilePhone" column="MobilePhone" not-null="false" />
+    <property name="CustomerName" column="CustomerName" not-null="false" />
+    <property name="InviteCode" column="InviteCode" not-null="false" />
+    <property name="InviteDate" column="InviteDate" not-null="false" />
+  </class>
+
+  <class name="InviteCode" table="Invite_Code" lazy="false">
+    <id name="Id" column="Id" type ="long">
+      <generator class="hilo" />
+    </id>
+
+    <property name="InviteType" column="InviteType" not-null="true" />
+    <property name="Code" column="InviteCode" not-null="true" />
+    <property name="Channel" column="Channel" not-null="false" />
+  </class>
+
+  <class name="InviteCodeAssociation" table="Invite_Code_Association" lazy="false">
+    <id name="Id" column="Id" type ="long">
+      <generator class="hilo" />
+    </id>
+
+    <property name="InviteType" column="InviteType" not-null="true" />
+    <property name="InviteCode" column="InviteCode" not-null="true" />
+    <property name="PartyId" column="PartyId" not-null="false" />
+  </class>
+
+  <class name="LoginSession"  table="Party_UserLogin_Session" lazy="false">
+    <id name="Id" column="Id" type ="long">
+      <generator class="hilo" />
+    </id>
+
+    <property name="LoginType" column="LoginType" not-null="true" />
+    <property name="UserName" column="UserName" not-null="true" />
+    <property name="SessionId" column="SessionId" not-null="true" />
+  </class>-->
+</hibernate-mapping>

@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{46BDA6D2-8A65-4348-BC83-DC6BF0CB7B3A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ZD.Service.DAL</RootNamespace>
+    <AssemblyName>ZD.Service.DAL</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Iesi.Collections">
+      <HintPath>..\lib\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate">
+      <HintPath>..\lib\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Channels" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Class1.cs" />
+    <Compile Include="Domain.Common\AbstractDomainObject.cs" />
+    <Compile Include="Domain.Common\BitAndFunction.cs" />
+    <Compile Include="Domain.Common\BusinessException.cs" />
+    <Compile Include="Domain.Common\CustomSQLDialect.cs" />
+    <Compile Include="Domain.Common\Entity.cs" />
+    <Compile Include="Domain.Common\LightState.cs" />
+    <Compile Include="Domain.Common\MyCallContextInitializer.cs" />
+    <Compile Include="Domain.Common\NHibernateSessionManager.cs" />
+    <Compile Include="Domain.Common\PersistenceInterceptor.cs" />
+    <Compile Include="Domain.Common\Query.cs" />
+    <Compile Include="Domain.Common\Repository.cs" />
+    <Compile Include="Domain.Common\SimpleSessionFactory.cs" />
+    <Compile Include="Domain.Common\TransHelper.cs" />
+    <Compile Include="Domain.Common\TupleToPropertyResultTransformer.cs" />
+    <Compile Include="Domain\Employee.cs" />
+    <Compile Include="Domain\UserInfo.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ZD.Service.Interface\ZD.Service.Interface.csproj">
+      <Project>{8a4c8b61-81ae-4580-b168-69280605c889}</Project>
+      <Name>ZD.Service.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZD.Utils\ZD.Utils.csproj">
+      <Project>{cf063b93-2ced-494f-beea-8d6190013cea}</Project>
+      <Name>ZD.Utils</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Domain\dbo.hbm.xml" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
